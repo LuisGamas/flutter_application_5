@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_application_5/authentication/domain/domain.dart';
 import 'package:flutter_application_5/authentication/infrastructure/mappers/user_client_mapper.dart';
+import 'package:flutter_application_5/authentication/infrastructure/models/user_client_model.dart';
 import 'package:flutter_application_5/config/config.dart';
 
 class AuthDataSourceImpl extends AuthDataSource {
@@ -24,8 +25,11 @@ class AuthDataSourceImpl extends AuthDataSource {
     });
 
     if(response.statusCode == 200) {
-      final user = UserClientMapper.userClientDataToEntity(response.data);
-      return user;
+
+      final user = UserClientResponse.fromJson(response.data);
+      UserClient userClient = UserClientMapper.userClientDataToEntity(user.datos.first);
+      return userClient;
+
     } else {
       throw Exception('Failed to load cliente details');
     }
